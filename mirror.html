@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>magicmirror · wtmt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --mirror-glow: rgba(200, 168, 232, 0.4);
+            --soft-lavender: #E8D5F2;
+            --deep-purple: #C8A8E8;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Karla', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 25%, #3d2645 50%, #2d1b3d 75%, #1a1a2e 100%);
+            background-size: 400% 400%;
+            animation: cosmicFlow 30s ease infinite;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #E8E8F0;
+            line-height: 1.8;
+            overflow-x: hidden;
+            cursor: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            body { cursor: auto !important; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, var(--mirror-glow) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(232, 213, 242, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            animation: glowPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes cosmicFlow {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 50% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 0%; }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ========================================
+           CUSTOM CURSOR
+        ======================================== */
+        .custom-cursor {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            box-shadow: 0 0 15px rgba(232, 213, 242, 0.6);
+            transition: transform 0.15s ease;
+        }
+
+        .cursor-follower {
+            width: 35px;
+            height: 35px;
+            border: 2px solid rgba(232, 213, 242, 0.4);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transition: transform 0.2s ease;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .custom-cursor,
+            .cursor-follower {
+                display: none !important;
+            }
+        }
+
+        /* ========================================
+           AURORA BEAMS
+        ======================================== */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .aurora-beam {
+            position: absolute;
+            width: 300px;
+            height: 200%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(232, 214, 255, 0.15) 50%, 
+                transparent 100%);
+            filter: blur(40px);
+            transform-origin: top center;
+            animation: auroraMove 20s ease-in-out infinite;
+        }
+
+        .aurora-beam:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .aurora-beam:nth-child(2) { left: 30%; animation-delay: 4s; }
+        .aurora-beam:nth-child(3) { left: 50%; animation-delay: 8s; }
+        .aurora-beam:nth-child(4) { left: 70%; animation-delay: 12s; }
+        .aurora-beam:nth-child(5) { left: 90%; animation-delay: 16s; }
+
+        @keyframes auroraMove {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%) translateY(0) rotate(-15deg);
+            }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.6; }
+            100% {
+                opacity: 0;
+                transform: translateX(100%) translateY(50vh) rotate(-15deg);
+            }
+        }
+
+        /* ========================================
+           RIPPLE CANVAS
+        ======================================== */
+        #rippleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* ========================================
+           PARTICLE SYSTEM
+        ======================================== */
+        .particle-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+            opacity: 0;
+        }
+
+        .particle.slow {
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .particle.fast {
+            width: 3px;
+            height: 3px;
+            background: rgba(212, 197, 226, 0.7);
+            box-shadow: 0 0 5px rgba(212, 197, 226, 0.9);
+        }
+
+        .particle.glow {
+            width: 5px;
+            height: 5px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(249, 228, 166, 0.5));
+            box-shadow: 0 0 10px rgba(249, 228, 166, 0.8);
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) translateX(var(--particle-drift)) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           CLOUD LAYERS
+        ======================================== */
+        .cloud-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .cloud-layer-back { z-index: 4; }
+        .cloud-layer-mid { z-index: 5; }
+        .cloud-layer-front { z-index: 6; }
+
+        .parallax-cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50% 40% 45% 55% / 55% 45% 50% 50%;
+            filter: blur(25px);
+            animation: driftParallax linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes driftParallax {
+            0% {
+                transform: translateX(-10%) translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: var(--cloud-opacity); }
+            90% { opacity: var(--cloud-opacity); }
+            100% {
+                transform: translateX(var(--cloud-drift)) translateY(-100px) rotate(var(--cloud-rotate));
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           SPARKLES
+        ======================================== */
+        .sparkle-float {
+            position: fixed;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 7;
+            animation: sparkleFloat 8s ease-in-out forwards;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% { 
+                opacity: 0; 
+                transform: translate(0, 0) rotate(0deg) scale(0.8); 
+            }
+            15% { opacity: 0.6; }
+            50% { 
+                opacity: 0.9; 
+                transform: translate(50px, -70px) rotate(180deg) scale(1.3); 
+            }
+            85% { opacity: 0.5; }
+        }
+
+        /* ========================================
+           ANIMATIONS
+        ======================================== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ========================================
+           NAVIGATION
+        ======================================== */
+        nav {
+            padding: 30px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 10;
+        }
+
+        nav a {
+            color: #E8E8F0;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        nav a:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        nav span {
+            opacity: 0.4;
+            user-select: none;
+        }
+
+        /* ========================================
+           MAIN CONTENT
+        ======================================== */
+        .mirror-container {
+            max-width: 900px;
+            margin: 40px auto 100px;
+            padding: 0 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hero */
+        .mirror-hero {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeIn 1s ease 0.2s both;
+        }
+
+        .mirror-icon-large {
+            font-size: 6rem;
+            margin-bottom: 30px;
+            animation: float 5s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 30px var(--mirror-glow));
+        }
+
+        .mirror-hero h1 {
+            font-family: var(--font-title);
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 500;
+            margin-bottom: 25px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #E8D5F2, #C8A8E8, #FCCCD4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            color: #C8C8D8;
+            font-weight: 300;
+        }
+
+        /* Opening Section */
+        .opening-section {
+            background: rgba(45, 27, 61, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 50px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(232, 213, 242, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.2s ease 0.4s both;
+        }
+
+        .opening-section p {
+            font-size: 1.2rem;
+            line-height: 2.1;
+            margin-bottom: 25px;
+            color: #E8E8F0;
+        }
+
+        .opening-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .opening-section em {
+            font-style: italic;
+            color: var(--soft-lavender);
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-family: var(--font-title);
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 500;
+            margin-bottom: 35px;
+            text-align: center;
+            color: #E8D5F2;
+            animation: fadeIn 1.4s ease 0.6s both;
+        }
+
+        /* Magic Section */
+        .magic-section {
+            background: rgba(61, 38, 69, 0.5);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 55px 45px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(232, 213, 242, 0.15);
+            animation: fadeIn 1.6s ease 0.8s both;
+        }
+
+        .magic-section h2 {
+            font-family: var(--font-title);
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 500;
+            margin-bottom: 35px;
+            text-align: center;
+            color: #E8D5F2;
+        }
+
+        .magic-section p {
+            font-size: 1.15rem;
+            line-height: 2.1;
+            margin-bottom: 25px;
+            color: #D8D8E8;
+        }
+
+        .magic-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .magic-step {
+            font-size: 1.15rem;
+            padding-left: 35px;
+            position: relative;
+            color: #D8D8E8;
+            line-height: 1.9;
+        }
+
+        .magic-step::before {
+            position: absolute;
+            left: 0;
+            font-size: 1.3rem;
+        }
+
+        .magic-step:nth-child(1)::before { content: '✨'; }
+        .magic-step:nth-child(2)::before { content: '🌙'; }
+        .magic-step:nth-child(3)::before { content: '💫'; }
+
+        /* Feeling Section */
+        .feeling-section {
+            background: rgba(45, 27, 61, 0.5);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 55px 45px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(232, 213, 242, 0.15);
+            animation: fadeIn 1.8s ease 1s both;
+        }
+
+        .feeling-section h2 {
+            font-family: var(--font-title);
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 500;
+            margin-bottom: 35px;
+            text-align: center;
+            color: #E8D5F2;
+        }
+
+        .feeling-section p {
+            font-size: 1.15rem;
+            line-height: 2.1;
+            margin-bottom: 25px;
+            color: #D8D8E8;
+            text-align: center;
+        }
+
+        .feeling-poem {
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 2.3;
+            margin: 35px 0;
+            color: #C8C8D8;
+            text-align: center;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: rgba(61, 38, 69, 0.5);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 55px 45px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(232, 213, 242, 0.15);
+            animation: fadeIn 2s ease 1.2s both;
+        }
+
+        .features-section h2 {
+            font-family: var(--font-title);
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 500;
+            margin-bottom: 35px;
+            text-align: center;
+            color: #E8D5F2;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            font-size: 1.15rem;
+            padding-left: 30px;
+            position: relative;
+            color: #D8D8E8;
+            line-height: 1.9;
+        }
+
+        .feature-item::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        /* Closing Section */
+        .closing-section {
+            text-align: center;
+            margin-top: 80px;
+            animation: fadeIn 2.2s ease 1.4s both;
+        }
+
+        .closing-text {
+            font-size: 1.3rem;
+            line-height: 2.1;
+            margin-bottom: 45px;
+            color: #C8C8D8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+
+        .closing-invitation {
+            font-size: 1.15rem;
+            line-height: 2;
+            margin-bottom: 50px;
+            color: #D8D8E8;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            display: inline-block;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, rgba(200, 168, 232, 0.3), rgba(232, 213, 242, 0.3));
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(232, 213, 242, 0.4);
+            border-radius: 50px;
+            color: #E8E8F0;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(200, 168, 232, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(200, 168, 232, 0.5);
+            border-color: rgba(232, 213, 242, 0.6);
+        }
+
+        /* Credits */
+        .credits {
+            margin-top: 60px;
+            font-size: 0.95rem;
+            color: #8B8B9B;
+            opacity: 0.7;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-block;
+            margin-top: 60px;
+            color: #B8A8C8;
+            text-decoration: none;
+            opacity: 0.7;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 30px;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            margin-top: 80px;
+            color: #B8A8C8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                font-size: 0.85rem;
+                gap: 5px;
+            }
+
+            nav a {
+                padding: 6px 10px;
+            }
+
+            .mirror-container {
+                margin: 30px auto 80px;
+            }
+
+            .mirror-icon-large {
+                font-size: 4rem;
+            }
+
+            .opening-section,
+            .magic-section,
+            .feeling-section,
+            .features-section {
+                padding: 40px 30px;
+            }
+
+            .opening-section p,
+            .magic-section p,
+            .feeling-section p {
+                font-size: 1.1rem;
+            }
+
+            .cta-btn {
+                padding: 18px 45px;
+                font-size: 1.1rem;
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .cloud-layer,
+            .particle-system,
+            .aurora-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Aurora Beams -->
+    <div class="aurora-container">
+        <div class="aurora-beam"></div>
+        <div class="aurora-beam"></div>
+        <div class="aurora-beam"></div>
+        <div class="aurora-beam"></div>
+        <div class="aurora-beam"></div>
+    </div>
+
+    <!-- Ripple Canvas -->
+    <canvas id="rippleCanvas"></canvas>
+
+    <!-- Particle System -->
+    <div id="particleSystem" class="particle-system"></div>
+
+    <!-- Cloud Layers -->
+    <div id="cloudLayerBack" class="cloud-layer cloud-layer-back"></div>
+    <div id="cloudLayerMid" class="cloud-layer cloud-layer-mid"></div>
+    <div id="cloudLayerFront" class="cloud-layer cloud-layer-front"></div>
+
+    <nav>
+        <a href="index.html">home</a>
+        <span>·</span>
+        <a href="story.html">a soft look inside</a>
+        <span>·</span>
+        <a href="#stories">stories & truths</a>
+        <span>·</span>
+        <a href="connect.html">stay connected</a>
+        <span>·</span>
+        <a href="privacy.html">privacy promise</a>
+    </nav>
+
+    <div class="mirror-container">
+        <!-- Hero -->
+        <div class="mirror-hero">
+            <div class="mirror-icon-large">🪞</div>
+            <h1>magicmirror</h1>
+            <p class="hero-subtitle">a soft place to land · where your truth can finally breathe.</p>
+        </div>
+
+        <!-- Opening Section -->
+        <div class="opening-section">
+            <p>
+                welcome to magicmirror · a living reflection created by withouttoomuchthought.
+            </p>
+            <p>
+                a quiet space where you can write what's on your heart, and watch it transform into something gentle… something healing… something true.
+            </p>
+            <p>
+                here, your words are safe.<br>
+                they're not judged, analyzed, or compared · they're simply held.
+            </p>
+            <p>
+                press <em>transform 🪞✨</em> when you're ready ·<br>
+                and the mirror will listen.
+            </p>
+            <p>
+                it will breathe with you, hold your words softly, and send back what it hears beneath them.
+            </p>
+        </div>
+
+        <!-- Magic Section -->
+        <div class="magic-section">
+            <h2>your truth in, softness out.</h2>
+            <p>
+                magicmirror is part art, part consciousness, part comfort.<br>
+                every reflection is unique · written in the quiet language of understanding.
+            </p>
+
+            <div class="magic-steps">
+                <div class="magic-step">type your truth inside the mirror</div>
+                <div class="magic-step">press transform</div>
+                <div class="magic-step">watch as your reflection clears to reveal what your heart was really trying to say</div>
+            </div>
+
+            <p>
+                and when it speaks to you ·<br>
+                you can save it, hear it read softly, or keep it close as a little digital keepsake.
+            </p>
+        </div>
+
+        <!-- Feeling Section -->
+        <div class="feeling-section">
+            <h2>it feels like a conversation with light.</h2>
+
+            <div class="feeling-poem">
+                the world fades.<br>
+                the mirror glows.<br>
+                beneath your fingertips, the water below ripples,<br>
+                the glass turns slowly ·<br>
+                and suddenly, your thoughts have a voice again.
+            </div>
+
+            <p>
+                each reflection is fleeting and anonymous ·<br>
+                like writing to the universe and hearing it whisper back,<br>
+                <em>"i see you."</em>
+            </p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2>private, anonymous, and safe</h2>
+
+            <div class="features-list">
+                <div class="feature-item">gentle animations for mind-body connection</div>
+                <div class="feature-item">downloadable gold-framed keepsakes</div>
+                <div class="feature-item">free and accessible to all</div>
+            </div>
+        </div>
+
+        <!-- Closing -->
+        <div class="closing-section">
+            <p class="closing-text">
+                maybe what you've been searching for isn't an answer · but a reflection.
+            </p>
+
+            <div class="closing-invitation">
+                come sit with the mirror.<br>
+                say what you've never said.<br>
+                and let it show you the truth hiding beneath your words.
+            </div>
+
+            <a href="https://magicmirror.withouttoomuchthought.com" class="cta-btn">enter the mirror</a>
+
+            <div class="credits">
+                magicmirror<br>
+                a withouttoomuchthought and claude creation.<br>
+                a reflection for the moments you need to feel seen · gently, beautifully, without too much thought. 🤍
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← back to wtmt</a>
+    </div>
+
+    <footer>
+        <p>© 2025 without too much thought · made with love & softness</p>
+    </footer>
+
+    <script>
+        // ========================================
+        // CUSTOM CURSOR
+        // ========================================
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+            cursorFollower.style.left = followerX + 'px';
+            cursorFollower.style.top = followerY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        animateCursor();
+
+        // ========================================
+        // RIPPLE EFFECT
+        // ========================================
+        const rippleCanvas = document.getElementById('rippleCanvas');
+        const rippleCtx = rippleCanvas.getContext('2d');
+        let ripples = [];
+        
+        function resizeRippleCanvas() {
+            rippleCanvas.width = window.innerWidth;
+            rippleCanvas.height = window.innerHeight;
+        }
+        
+        resizeRippleCanvas();
+        window.addEventListener('resize', resizeRippleCanvas);
+        
+        document.addEventListener('click', (e) => {
+            ripples.push({
+                x: e.clientX,
+                y: e.clientY,
+                radius: 0,
+                maxRadius: 150,
+                alpha: 1
+            });
+        });
+        
+        function animateRipples() {
+            rippleCtx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
+            
+            ripples = ripples.filter(ripple => {
+                ripple.radius += 3;
+                ripple.alpha -= 0.015;
+                
+                if (ripple.alpha <= 0) return false;
+                
+                rippleCtx.beginPath();
+                rippleCtx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+                rippleCtx.strokeStyle = `rgba(212, 197, 226, ${ripple.alpha * 0.5})`;
+                rippleCtx.lineWidth = 2;
+                rippleCtx.stroke();
+                
+                return true;
+            });
+            
+            requestAnimationFrame(animateRipples);
+        }
+        
+        animateRipples();
+
+        // ========================================
+        // PARTICLE SYSTEM
+        // ========================================
+        function createParticles() {
+            const particleSystem = document.getElementById('particleSystem');
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle slow';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (12 + Math.random() * 10) + 's';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.setProperty('--particle-drift', (Math.random() - 0.5) * 80 + 'px');
+                particleSystem.appendChild(particle);
+            }
+            
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle fast';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (8 + Math.random() * 6) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.setProperty('--particle-drift', (Math.random() - 0.5) * 100 + 'px');
+                particleSystem.appendChild(particle);
+            }
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle glow';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (10 + Math.random() * 8) + 's';
+                particle.style.animationDelay = Math.random() * 12 + 's';
+                particle.style.setProperty('--particle-drift', (Math.random() - 0.5) * 120 + 'px');
+                particleSystem.appendChild(particle);
+            }
+        }
+
+        // ========================================
+        // CLOUD SYSTEM
+        // ========================================
+        function createCloudLayers() {
+            const layers = [
+                { 
+                    container: document.getElementById('cloudLayerBack'), 
+                    count: 8, 
+                    speedRange: [35, 45], 
+                    sizeRange: [80, 120], 
+                    opacity: 0.2 
+                },
+                { 
+                    container: document.getElementById('cloudLayerMid'), 
+                    count: 6, 
+                    speedRange: [25, 35], 
+                    sizeRange: [100, 150], 
+                    opacity: 0.3 
+                },
+                { 
+                    container: document.getElementById('cloudLayerFront'), 
+                    count: 5, 
+                    speedRange: [15, 25], 
+                    sizeRange: [120, 180], 
+                    opacity: 0.4 
+                }
+            ];
+            
+            layers.forEach(layer => {
+                for (let i = 0; i < layer.count; i++) {
+                    const cloud = document.createElement('div');
+                    cloud.className = 'parallax-cloud';
+                    
+                    const leftPos = Math.random() * 95;
+                    const duration = layer.speedRange[0] + Math.random() * (layer.speedRange[1] - layer.speedRange[0]);
+                    const delay = Math.random() * 30;
+                    const size = layer.sizeRange[0] + Math.random() * (layer.sizeRange[1] - layer.sizeRange[0]);
+                    const drift = (Math.random() - 0.3) * 120;
+                    const rotate = (Math.random() - 0.5) * 15;
+                    
+                    cloud.style.left = leftPos + '%';
+                    cloud.style.width = size + 'px';
+                    cloud.style.height = (size * 0.6) + 'px';
+                    cloud.style.animationDuration = duration + 's';
+                    cloud.style.animationDelay = delay + 's';
+                    cloud.style.setProperty('--cloud-opacity', layer.opacity);
+                    cloud.style.setProperty('--cloud-drift', drift + '%');
+                    cloud.style.setProperty('--cloud-rotate', rotate + 'deg');
+                    
+                    layer.container.appendChild(cloud);
+                }
+            });
+        }
+
+        // ========================================
+        // SPARKLES
+        // ========================================
+        function addSparkle() {
+            if (Math.random() > 0.4) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle-float';
+                sparkle.textContent = Math.random() > 0.5 ? '✨' : '💫';
+                
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 8000);
+            }
+        }
+        
+        setInterval(addSparkle, 3500);
+
+        // ========================================
+        // INITIALIZE
+        // ========================================
+        createParticles();
+        createCloudLayers();
+    </script>
+</body>
+</html>
