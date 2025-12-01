@@ -25,6 +25,7 @@
             --ink: #2F2F2F;
             --text: #5A5A5A;
             
+            /* base pastel gradient – will be shifted by JS by time of day */
             --gradient-1: #FFE5D9;
             --gradient-2: #FCCCD4;
             --gradient-3: #E8D5F2;
@@ -245,6 +246,39 @@
             }
         }
 
+        /* quote clouds */
+        .quote-cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.28);
+            backdrop-filter: blur(15px);
+            border-radius: 22px;
+            padding: 10px 16px;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-style: italic;
+            color: rgba(74, 74, 74, 0.6);
+            line-height: 1.6;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            animation: driftQuoteCloud linear infinite;
+            opacity: 0;
+            max-width: 210px;
+            white-space: pre-line;
+        }
+
+        @keyframes driftQuoteCloud {
+            0% {
+                transform: translateX(-5%) translateY(100vh) rotate(0deg) scale(0.9);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateX(var(--quote-drift)) translateY(-80px) rotate(var(--quote-rotate)) scale(1);
+                opacity: 0;
+            }
+        }
+
         /* ========================================
            SPARKLES
         ======================================== */
@@ -332,7 +366,7 @@
         }
 
         /* ========================================
-           HERO SECTION - THE OPENING POEM
+           HERO SECTION
         ======================================== */
         .hero {
             max-width: 900px;
@@ -417,7 +451,7 @@
         }
 
         /* ========================================
-           SECTIONS - SPACIOUS & BREATHING
+           SECTIONS
         ======================================== */
         .section {
             max-width: 1000px;
@@ -491,7 +525,7 @@
         }
 
         /* ========================================
-           MIRROR SECTION - SPECIAL MAGIC
+           MIRROR SECTION
         ======================================== */
         .mirror-section {
             max-width: 950px;
@@ -688,7 +722,7 @@
             <a href="#contact">contact</a>
         </nav>
 
-        <!-- Hero Section - The Opening Poem -->
+        <!-- Hero Section -->
         <div class="hero" id="home">
             <p class="hero-opening">
                 maybe you've been moving too fast for too long.<br>
@@ -773,7 +807,8 @@
                     💫 coming soon: memory mirror · color this truth
                 </p>
 
-                <a href="mirror.html" class="btn">step through the mirror</a>
+                <!-- updated link: go straight to /magicmirror/ -->
+                <a href="/magicmirror/" class="btn">step through the mirror</a>
             </div>
         </div>
 
@@ -975,6 +1010,42 @@
 
     <script>
         // ========================================
+        // TIME-BASED GRADIENT (soft day → night)
+        // ========================================
+        function setTimeBasedGradient() {
+            const hour = new Date().getHours();
+            const root = document.documentElement;
+
+            // morning
+            if (hour >= 6 && hour < 12) {
+                root.style.setProperty('--gradient-1', '#FFEBDD');
+                root.style.setProperty('--gradient-2', '#FFE3C8');
+                root.style.setProperty('--gradient-3', '#F4DDF5');
+                root.style.setProperty('--gradient-4', '#FFF4E2');
+            // afternoon
+            } else if (hour >= 12 && hour < 18) {
+                root.style.setProperty('--gradient-1', '#FFDAD1');
+                root.style.setProperty('--gradient-2', '#FFC7D8');
+                root.style.setProperty('--gradient-3', '#E5D4FF');
+                root.style.setProperty('--gradient-4', '#FFE9E0');
+            // evening
+            } else if (hour >= 18 && hour < 22) {
+                root.style.setProperty('--gradient-1', '#F5C0C8');
+                root.style.setProperty('--gradient-2', '#E6B6E9');
+                root.style.setProperty('--gradient-3', '#D7C3FF');
+                root.style.setProperty('--gradient-4', '#F5CFDF');
+            // night
+            } else {
+                root.style.setProperty('--gradient-1', '#E3C3F2');
+                root.style.setProperty('--gradient-2', '#D9B5E5');
+                root.style.setProperty('--gradient-3', '#CBB7FF');
+                root.style.setProperty('--gradient-4', '#E6C9F0');
+            }
+        }
+        setTimeBasedGradient();
+        setInterval(setTimeBasedGradient, 60 * 60 * 1000);
+
+        // ========================================
         // CUSTOM CURSOR
         // ========================================
         const cursor = document.querySelector('.custom-cursor');
@@ -1144,6 +1215,47 @@
             });
         }
 
+        // healing quotes for the quote-clouds
+        const healingQuotes = [
+            "you’re not too much.\nmaybe the world was too little.",
+            "you don’t have to earn\nrest or softness.",
+            "maybe you weren’t overreacting…\nmaybe it really did hurt.",
+            "healing isn’t about becoming new.\nit’s about remembering you.",
+            "you were never behind.\nyou were just on your own timeline.",
+            "it’s okay if you’re not okay.\nthat’s still a version of you worth loving.",
+            "you don’t have to hold it all\ntogether to be worthy of love.",
+            "maybe the bravest thing is\nstaying when you want to run.",
+            "your softness is not a flaw.\nit’s the reason you notice the magic.",
+            "there is nothing wrong with you\nfor needing more.",
+            "you’ve survived every hard day\nup until today.\nthat counts for something.",
+            "you’re allowed to change your mind\nwithout explaining why.",
+            "you were never too sensitive.\nyou were just never held softly enough."
+        ];
+
+        function createQuoteClouds() {
+            const frontLayer = document.getElementById('cloudLayerFront');
+            
+            for (let i = 0; i < 7; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'quote-cloud';
+                cloud.textContent = healingQuotes[Math.floor(Math.random() * healingQuotes.length)];
+                
+                const leftPos = Math.random() * 95;
+                const duration = 22 + Math.random() * 18;
+                const delay = Math.random() * 25;
+                const drift = (Math.random() - 0.4) * 130;
+                const rotate = (Math.random() - 0.5) * 18;
+                
+                cloud.style.left = leftPos + '%';
+                cloud.style.animationDuration = duration + 's';
+                cloud.style.animationDelay = delay + 's';
+                cloud.style.setProperty('--quote-drift', drift + '%');
+                cloud.style.setProperty('--quote-rotate', rotate + 'deg');
+                
+                frontLayer.appendChild(cloud);
+            }
+        }
+
         // ========================================
         // SPARKLES
         // ========================================
@@ -1184,6 +1296,7 @@
         // ========================================
         createParticles();
         createCloudLayers();
+        createQuoteClouds();
     </script>
 </body>
 </html>
