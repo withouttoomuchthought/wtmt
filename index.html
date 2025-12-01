@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>maybe this is where you pause · wtmt</title>
+    <meta name="description" content="a quiet little world made of color, softness, and truth... where you can breathe again. coloring as healing. storytelling as remembering. reflection as coming home.">
+    <meta name="theme-color" content="#E8D5F2">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="withouttoomuchthought · a soft place to land">
+    <meta property="og:description" content="a quiet little world made of color, softness, and truth... where you can breathe again.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://withouttoomuchthought.com">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -25,7 +36,7 @@
             --ink: #2F2F2F;
             --text: #5A5A5A;
             
-            /* base pastel gradient – will be shifted by JS by time of day */
+            /* base pastel gradient – shifted by JS based on time of day */
             --gradient-1: #FFE5D9;
             --gradient-2: #FCCCD4;
             --gradient-3: #E8D5F2;
@@ -73,6 +84,7 @@
             z-index: 99999;
             box-shadow: 0 0 15px rgba(232, 213, 242, 0.6);
             transition: transform 0.15s ease;
+            transform: translate(-50%, -50%);
         }
 
         .cursor-follower {
@@ -84,6 +96,7 @@
             pointer-events: none;
             z-index: 99998;
             transition: transform 0.2s ease;
+            transform: translate(-50%, -50%);
         }
 
         @media (hover: none) and (pointer: coarse) {
@@ -321,6 +334,11 @@
             50% { transform: scale(1.02); }
         }
 
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
         /* ========================================
            MAIN WRAPPER
         ======================================== */
@@ -448,6 +466,10 @@
             background: rgba(255, 255, 255, 0.75);
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
         }
 
         /* ========================================
@@ -800,14 +822,13 @@
 
                 <p class="mirror-features">
                     🌙 you can:<br>
-                    save your reflection · hear it read softly · download it as a keepsake
+                    save your reflection · share it · download it as a keepsake
                 </p>
 
                 <p class="mirror-features">
                     💫 coming soon: memory mirror · color this truth
                 </p>
 
-                <!-- updated link: go straight to /magicmirror/ -->
                 <a href="https://magicmirror.withouttoomuchthought.com" class="btn">step through the mirror</a>
             </div>
         </div>
@@ -1016,25 +1037,25 @@
             const hour = new Date().getHours();
             const root = document.documentElement;
 
-            // morning
+            // morning (6am - 12pm)
             if (hour >= 6 && hour < 12) {
                 root.style.setProperty('--gradient-1', '#FFEBDD');
                 root.style.setProperty('--gradient-2', '#FFE3C8');
                 root.style.setProperty('--gradient-3', '#F4DDF5');
                 root.style.setProperty('--gradient-4', '#FFF4E2');
-            // afternoon
+            // afternoon (12pm - 6pm)
             } else if (hour >= 12 && hour < 18) {
                 root.style.setProperty('--gradient-1', '#FFDAD1');
                 root.style.setProperty('--gradient-2', '#FFC7D8');
                 root.style.setProperty('--gradient-3', '#E5D4FF');
                 root.style.setProperty('--gradient-4', '#FFE9E0');
-            // evening
+            // evening (6pm - 10pm)
             } else if (hour >= 18 && hour < 22) {
                 root.style.setProperty('--gradient-1', '#F5C0C8');
                 root.style.setProperty('--gradient-2', '#E6B6E9');
                 root.style.setProperty('--gradient-3', '#D7C3FF');
                 root.style.setProperty('--gradient-4', '#F5CFDF');
-            // night
+            // night (10pm - 6am)
             } else {
                 root.style.setProperty('--gradient-1', '#E3C3F2');
                 root.style.setProperty('--gradient-2', '#D9B5E5');
@@ -1130,6 +1151,7 @@
         function createParticles() {
             const particleSystem = document.getElementById('particleSystem');
             
+            // slow particles
             for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle slow';
@@ -1140,6 +1162,7 @@
                 particleSystem.appendChild(particle);
             }
             
+            // fast particles
             for (let i = 0; i < 12; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle fast';
@@ -1150,6 +1173,7 @@
                 particleSystem.appendChild(particle);
             }
             
+            // glow particles
             for (let i = 0; i < 8; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle glow';
@@ -1217,18 +1241,18 @@
 
         // healing quotes for the quote-clouds
         const healingQuotes = [
-            "you’re not too much.\nmaybe the world was too little.",
-            "you don’t have to earn\nrest or softness.",
-            "maybe you weren’t overreacting…\nmaybe it really did hurt.",
-            "healing isn’t about becoming new.\nit’s about remembering you.",
+            "you're not too much.\nmaybe the world was too little.",
+            "you don't have to earn\nrest or softness.",
+            "maybe you weren't overreacting…\nmaybe it really did hurt.",
+            "healing isn't about becoming new.\nit's about remembering you.",
             "you were never behind.\nyou were just on your own timeline.",
-            "it’s okay if you’re not okay.\nthat’s still a version of you worth loving.",
-            "you don’t have to hold it all\ntogether to be worthy of love.",
+            "it's okay if you're not okay.\nthat's still a version of you worth loving.",
+            "you don't have to hold it all\ntogether to be worthy of love.",
             "maybe the bravest thing is\nstaying when you want to run.",
-            "your softness is not a flaw.\nit’s the reason you notice the magic.",
+            "your softness is not a flaw.\nit's the reason you notice the magic.",
             "there is nothing wrong with you\nfor needing more.",
-            "you’ve survived every hard day\nup until today.\nthat counts for something.",
-            "you’re allowed to change your mind\nwithout explaining why.",
+            "you've survived every hard day\nup until today.\nthat counts for something.",
+            "you're allowed to change your mind\nwithout explaining why.",
             "you were never too sensitive.\nyou were just never held softly enough."
         ];
 
@@ -1292,11 +1316,42 @@
         });
 
         // ========================================
+        // INTERSECTION OBSERVER FOR ANIMATIONS
+        // ========================================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // observe all section cards
+        document.querySelectorAll('.section-card, .mirror-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(card);
+        });
+
+        // ========================================
         // INITIALIZE
         // ========================================
         createParticles();
         createCloudLayers();
         createQuoteClouds();
+
+        // log a cozy welcome
+        console.log('%c🤍 welcome to withouttoomuchthought', 
+            'font-family: Georgia, serif; font-size: 14px; color: #5A5A5A; padding: 10px;');
+        console.log('%ca soft place to land.', 
+            'font-family: Georgia, serif; font-size: 12px; color: #888; font-style: italic;');
     </script>
 </body>
 </html>
