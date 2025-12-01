@@ -118,6 +118,21 @@
             }
         }
 
+        /* soft mode (less animation / visuals) */
+        body[data-mode="soft"] {
+            animation: none;
+            background-size: 200% 200%;
+        }
+
+        body[data-mode="soft"] .aurora-container,
+        body[data-mode="soft"] .particle-system,
+        body[data-mode="soft"] .mm-water,
+        body[data-mode="soft"] #rippleCanvas,
+        body[data-mode="soft"] .cloud-layer,
+        body[data-mode="soft"] .sparkle-float {
+            display: none !important;
+        }
+
         /* ========================================
            BACK TO WTMT BUTTON
         ======================================== */
@@ -554,11 +569,20 @@
             font-family: var(--font-body);
             font-size: 1em;
             line-height: var(--line-height-body);
-            margin-bottom: var(--space-xl);
+            margin-bottom: var(--space-xs);
             opacity: 0.9;
             text-align: center;
             color: rgba(255, 255, 255, 0.85);
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .micro-help {
+            font-family: var(--font-body);
+            font-size: 0.85em;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.82);
+            margin-bottom: var(--space-xl);
+            opacity: 0.9;
         }
 
         /* ========================================
@@ -619,6 +643,29 @@
             color: #999;
             font-style: italic;
             transition: opacity 0.4s ease;
+        }
+
+        .char-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .char-hint {
+            font-size: 0.75em;
+            color: rgba(47,47,47,0.6);
+            font-style: italic;
+        }
+
+        .char-counter {
+            font-size: 0.75em;
+            color: rgba(47,47,47,0.55);
+        }
+
+        .char-counter.near-limit {
+            color: #B35A5A;
+            font-weight: 500;
         }
 
         .submit-btn {
@@ -1005,6 +1052,186 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
+        /* soft mode toggle */
+        .mode-toggle {
+            position: fixed;
+            bottom: calc(var(--space-sm) + 34px);
+            right: var(--space-sm);
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            font-family: var(--font-body);
+            font-size: 0.75em;
+            color: var(--ink);
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        }
+
+        .mode-toggle:hover {
+            background: rgba(255,255,255,0.85);
+        }
+
+        /* debug chip */
+        .debug-chip {
+            position: fixed;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.7em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            z-index: 120;
+        }
+
+        /* memory mirror overlay */
+        .memory-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 130;
+            display: none;
+        }
+
+        .memory-overlay.active {
+            display: block;
+        }
+
+        .memory-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(12, 10, 22, 0.45);
+            backdrop-filter: blur(6px);
+        }
+
+        .memory-panel {
+            position: absolute;
+            inset: 10% 50% auto 50%;
+            transform: translateX(-50%);
+            max-width: 520px;
+            width: calc(100% - 40px);
+            background: rgba(255,255,255,0.96);
+            border-radius: 20px;
+            padding: 18px 18px 16px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+            display: flex;
+            flex-direction: column;
+            max-height: 80vh;
+        }
+
+        @media (max-width: 600px) {
+            .memory-panel {
+                inset: 8% 50% auto 50%;
+                width: calc(100% - 24px);
+            }
+        }
+
+        .memory-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .memory-title {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            text-transform: lowercase;
+            color: var(--ink);
+        }
+
+        .memory-subtitle {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: rgba(47,47,47,0.6);
+            margin-bottom: 10px;
+        }
+
+        .memory-close {
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: rgba(47,47,47,0.7);
+        }
+
+        .memory-list {
+            margin-top: 4px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            overflow-y: auto;
+        }
+
+        .memory-empty {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: rgba(47,47,47,0.65);
+            text-align: center;
+            padding: 20px 8px;
+        }
+
+        .memory-card {
+            padding: 10px 8px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(250,249,246,0.9);
+            margin-bottom: 10px;
+        }
+
+        .memory-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: rgba(47,47,47,0.6);
+            margin-bottom: 4px;
+        }
+
+        .memory-original {
+            font-size: 0.78rem;
+            font-style: italic;
+            color: rgba(47,47,47,0.8);
+            padding: 6px 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.8);
+            margin-bottom: 6px;
+        }
+
+        .memory-text {
+            font-size: 0.8rem;
+            color: #2F2F2F;
+            line-height: 1.5;
+        }
+
+        .memory-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            justify-content: flex-end;
+        }
+
+        .memory-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-family: var(--font-body);
+            cursor: pointer;
+            background: rgba(255,255,255,0.9);
+            color: var(--ink);
+        }
+
+        .memory-btn.delete {
+            background: rgba(255, 220, 220, 0.9);
+            color: #7A2E2E;
+        }
+
         @media (max-width: 480px) {
             body { padding: var(--space-sm); }
             .logo { font-size: var(--font-h2-desktop); }
@@ -1098,9 +1325,17 @@
             <p class="tagline">
                 your truth, transformed withouttoomuchthought.
             </p>
+            <p class="micro-help">
+                write 1–4 lines about what you're feeling.<br>
+                press enter to send · shift + enter for a new line.
+            </p>
 
             <div class="glass-card">
                 <textarea id="userInput" placeholder="tell me what you're feeling..." maxlength="500"></textarea>
+                <div class="char-row">
+                    <span class="char-hint">for the softest reflections, a few paragraphs is perfect 💛</span>
+                    <span class="char-counter" id="charCounter">0/500</span>
+                </div>
                 <button class="submit-btn" onclick="submitThought()">
                     transform 🪞✨
                 </button>
@@ -1143,8 +1378,9 @@
                 </p>
 
                 <footer class="mm-actions">
-                    <button class="mm-btn" id="speakBtn" aria-pressed="false">play voice</button>
                     <button class="mm-btn" id="copyBtn">copy</button>
+                    <button class="mm-btn" id="saveReflectionBtn">save</button>
+                    <button class="mm-btn" id="openMemoryBtn">memory mirror</button>
                 </footer>
 
                 <button class="mm-action-btn" onclick="shareToSocial()">
@@ -1189,10 +1425,38 @@
 
     <a href="https://www.withouttoomuchthought.com" class="wtmt-link">withouttoomuchthought.com</a>
 
+    <!-- Soft mode toggle -->
+    <button class="mode-toggle" id="modeToggleBtn">🌙 soft mode</button>
+
+    <!-- Memory mirror overlay -->
+    <div class="memory-overlay" id="memoryOverlay" aria-hidden="true">
+        <div class="memory-backdrop" onclick="closeMemory()"></div>
+        <div class="memory-panel" role="dialog" aria-modal="true" aria-labelledby="memoryTitle">
+            <div class="memory-header">
+                <div>
+                    <div class="memory-title" id="memoryTitle">memory mirror</div>
+                </div>
+                <button class="memory-close" onclick="closeMemory()" aria-label="close">✕</button>
+            </div>
+            <p class="memory-subtitle">
+                a quiet place for your saved reflections. only you can see this — it lives in your browser. 🤍
+            </p>
+            <div class="memory-list" id="memoryList"></div>
+        </div>
+    </div>
+
     <script>
         const WEBHOOK_URL = 'https://magicmirror.withouttoomuchthought.workers.dev/';
         const DEBUG = new URLSearchParams(window.location.search).get('debug') === 'true';
+        const STORAGE_KEY = 'magicmirror_memories_v1';
         function log(...args) { if (DEBUG) console.log('[magicmirror]', ...args); }
+
+        if (DEBUG) {
+            const chip = document.createElement('div');
+            chip.className = 'debug-chip';
+            chip.textContent = 'magicmirror v1.0 · debug';
+            document.body.appendChild(chip);
+        }
 
         function setTimeBasedGradient() {
             const hour = new Date().getHours();
@@ -1238,6 +1502,20 @@
             promptIndex = (promptIndex + 1) % prompts.length;
         }
         setInterval(rotatePrompt, 4000);
+
+        /* char counter */
+        const charCounter = document.getElementById('charCounter');
+        function updateCharCounter() {
+            const len = textarea.value.length;
+            charCounter.textContent = `${len}/500`;
+            if (len > 420) {
+                charCounter.classList.add('near-limit');
+            } else {
+                charCounter.classList.remove('near-limit');
+            }
+        }
+        textarea.addEventListener('input', updateCharCounter);
+        updateCharCounter();
 
         const loadingMessages = [
             "holding your words gently...",
@@ -1540,34 +1818,140 @@
             }
         });
 
-        let speaking = false, utterance;
-        document.getElementById('speakBtn').addEventListener('click', () => {
-            const btn = document.getElementById('speakBtn');
-            const text = document.getElementById('transformedText').innerText;
-            if (!('speechSynthesis' in window)) {
-                toast('voice not supported');
+        /* memory mirror helpers */
+        function loadMemories() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveMemories(list) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            } catch (e) {
+                log('unable to save memories', e);
+            }
+        }
+
+        function saveReflectionToMemory(original, transformed) {
+            const list = loadMemories();
+            const entry = {
+                id: Date.now(),
+                createdAt: new Date().toISOString(),
+                original,
+                transformed
+            };
+            list.unshift(entry);
+            if (list.length > 50) list.length = 50;
+            saveMemories(list);
+            renderMemoryList();
+            toast('saved to your memory mirror');
+            const btn = document.getElementById('saveReflectionBtn');
+            btn.textContent = 'saved ✓';
+            setTimeout(() => { btn.textContent = 'save'; }, 1800);
+        }
+
+        function formatMemoryDate(iso) {
+            const d = new Date(iso);
+            return d.toLocaleString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function renderMemoryList() {
+            const container = document.getElementById('memoryList');
+            const list = loadMemories();
+            if (!list.length) {
+                container.innerHTML = '<div class="memory-empty">no saved reflections yet.<br>when a reflection lands, tap “save” and it will appear here. 🌙</div>';
                 return;
             }
-            if (speaking) {
-                window.speechSynthesis.cancel();
-                speaking = false;
-                btn.textContent = 'play voice';
-                btn.setAttribute('aria-pressed', 'false');
+            container.innerHTML = '';
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.id = item.id;
+                card.innerHTML = `
+                    <div class="memory-meta">
+                        <span>${formatMemoryDate(item.createdAt)}</span>
+                        <span>saved reflection</span>
+                    </div>
+                    <div class="memory-original">"${(item.original || '').slice(0, 140)}${item.original.length > 140 ? '…' : ''}"</div>
+                    <div class="memory-text">${item.transformed.replace(/\n/g, '<br>')}</div>
+                    <div class="memory-actions">
+                        <button class="memory-btn" data-action="copy">copy</button>
+                        <button class="memory-btn delete" data-action="delete">delete</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            container.querySelectorAll('.memory-card').forEach(card => {
+                card.addEventListener('click', async (e) => {
+                    const action = e.target.dataset.action;
+                    if (!action) return;
+                    const id = Number(card.dataset.id);
+                    const list = loadMemories();
+                    const entry = list.find(x => x.id === id);
+                    if (!entry) return;
+
+                    if (action === 'delete') {
+                        const updated = list.filter(x => x.id !== id);
+                        saveMemories(updated);
+                        renderMemoryList();
+                    } else if (action === 'copy') {
+                        try {
+                            await navigator.clipboard.writeText(entry.transformed);
+                            toast('copied reflection');
+                        } catch {
+                            toast('copy not available');
+                        }
+                    }
+                });
+            });
+        }
+
+        function openMemory() {
+            renderMemoryList();
+            const overlay = document.getElementById('memoryOverlay');
+            overlay.classList.add('active');
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeMemory() {
+            const overlay = document.getElementById('memoryOverlay');
+            overlay.classList.remove('active');
+            overlay.setAttribute('aria-hidden', 'true');
+        }
+
+        document.getElementById('openMemoryBtn').addEventListener('click', openMemory);
+        document.getElementById('saveReflectionBtn').addEventListener('click', () => {
+            const original = currentUserInput.trim();
+            const transformed = document.getElementById('transformedText').innerText.trim();
+            if (!original || !transformed) {
+                toast('nothing to save yet');
+                return;
+            }
+            saveReflectionToMemory(original, transformed);
+        });
+
+        /* soft mode toggle */
+        const modeToggleBtn = document.getElementById('modeToggleBtn');
+        modeToggleBtn.addEventListener('click', () => {
+            const body = document.body;
+            if (body.dataset.mode === 'soft') {
+                delete body.dataset.mode;
+                modeToggleBtn.textContent = '🌙 soft mode';
             } else {
-                utterance = new SpeechSynthesisUtterance(text);
-                utterance.rate = 0.98;
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
-                utterance.onend = () => {
-                    speaking = false;
-                    btn.textContent = 'play voice';
-                    btn.setAttribute('aria-pressed', 'false');
-                };
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(utterance);
-                speaking = true;
-                btn.textContent = 'pause voice';
-                btn.setAttribute('aria-pressed', 'true');
+                body.dataset.mode = 'soft';
+                modeToggleBtn.textContent = '✨ visual mode';
             }
         });
 
@@ -1590,6 +1974,7 @@
             showSequentialLoading();
             
             try {
+                const start = performance.now();
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1600,6 +1985,9 @@
                 });
                 
                 const data = await response.json();
+                const elapsed = performance.now() - start;
+                log('worker response time (ms):', elapsed.toFixed(0));
+
                 hideSequentialLoading();
                 document.getElementById('loadingView').classList.remove('active');
 
@@ -1770,6 +2158,7 @@
             document.getElementById('resultView').classList.remove('active');
             document.getElementById('submissionView').classList.add('active');
             document.getElementById('userInput').value = '';
+            updateCharCounter();
             currentUserInput = '';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
