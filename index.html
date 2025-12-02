@@ -36,7 +36,6 @@
             --ink: #2F2F2F;
             --text: #5A5A5A;
             
-            /* base pastel gradient – shifted by JS based on time of day */
             --gradient-1: #FFE5D9;
             --gradient-2: #FCCCD4;
             --gradient-3: #E8D5F2;
@@ -71,9 +70,7 @@
             75% { background-position: 50% 0%; }
         }
 
-        /* ========================================
-           CUSTOM CURSOR
-        ======================================== */
+        /* Custom Cursor */
         .custom-cursor {
             width: 12px;
             height: 12px;
@@ -100,15 +97,10 @@
         }
 
         @media (hover: none) and (pointer: coarse) {
-            .custom-cursor,
-            .cursor-follower {
-                display: none !important;
-            }
+            .custom-cursor, .cursor-follower { display: none !important; }
         }
 
-        /* ========================================
-           AURORA BEAMS
-        ======================================== */
+        /* Aurora Beams */
         .aurora-container {
             position: fixed;
             top: 0;
@@ -124,10 +116,7 @@
             position: absolute;
             width: 300px;
             height: 200%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 229, 217, 0.12) 50%, 
-                transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 229, 217, 0.12) 50%, transparent 100%);
             filter: blur(40px);
             transform-origin: top center;
             animation: auroraMove 20s ease-in-out infinite;
@@ -140,21 +129,13 @@
         .aurora-beam:nth-child(5) { left: 90%; animation-delay: 16s; }
 
         @keyframes auroraMove {
-            0% {
-                opacity: 0;
-                transform: translateX(-100%) translateY(0) rotate(-15deg);
-            }
+            0% { opacity: 0; transform: translateX(-100%) translateY(0) rotate(-15deg); }
             15% { opacity: 0.6; }
             85% { opacity: 0.6; }
-            100% {
-                opacity: 0;
-                transform: translateX(100%) translateY(50vh) rotate(-15deg);
-            }
+            100% { opacity: 0; transform: translateX(100%) translateY(50vh) rotate(-15deg); }
         }
 
-        /* ========================================
-           RIPPLE CANVAS
-        ======================================== */
+        /* Ripple Canvas */
         #rippleCanvas {
             position: fixed;
             top: 0;
@@ -165,9 +146,7 @@
             z-index: 2;
         }
 
-        /* ========================================
-           PARTICLE SYSTEM
-        ======================================== */
+        /* Particle System */
         .particle-system {
             position: fixed;
             top: 0;
@@ -208,21 +187,13 @@
         }
 
         @keyframes floatParticle {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0) rotate(0deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) translateX(0) scale(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
             90% { opacity: 1; }
-            100% {
-                transform: translateY(-100px) translateX(var(--particle-drift)) scale(1) rotate(360deg);
-                opacity: 0;
-            }
+            100% { transform: translateY(-100px) translateX(var(--particle-drift)) scale(1) rotate(360deg); opacity: 0; }
         }
 
-        /* ========================================
-           CLOUD LAYERS
-        ======================================== */
+        /* Cloud Layers */
         .cloud-layer {
             position: fixed;
             top: 0;
@@ -247,19 +218,12 @@
         }
 
         @keyframes driftParallax {
-            0% {
-                transform: translateX(-10%) translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
+            0% { transform: translateX(-10%) translateY(100vh) rotate(0deg); opacity: 0; }
             10% { opacity: var(--cloud-opacity); }
             90% { opacity: var(--cloud-opacity); }
-            100% {
-                transform: translateX(var(--cloud-drift)) translateY(-100px) rotate(var(--cloud-rotate));
-                opacity: 0;
-            }
+            100% { transform: translateX(var(--cloud-drift)) translateY(-100px) rotate(var(--cloud-rotate)); opacity: 0; }
         }
 
-        /* quote clouds */
         .quote-cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.28);
@@ -280,21 +244,13 @@
         }
 
         @keyframes driftQuoteCloud {
-            0% {
-                transform: translateX(-5%) translateY(100vh) rotate(0deg) scale(0.9);
-                opacity: 0;
-            }
+            0% { transform: translateX(-5%) translateY(100vh) rotate(0deg) scale(0.9); opacity: 0; }
             10% { opacity: 0.6; }
             90% { opacity: 0.6; }
-            100% {
-                transform: translateX(var(--quote-drift)) translateY(-80px) rotate(var(--quote-rotate)) scale(1);
-                opacity: 0;
-            }
+            100% { transform: translateX(var(--quote-drift)) translateY(-80px) rotate(var(--quote-rotate)) scale(1); opacity: 0; }
         }
 
-        /* ========================================
-           SPARKLES
-        ======================================== */
+        /* Sparkles */
         .sparkle-float {
             position: fixed;
             font-size: 12px;
@@ -304,21 +260,13 @@
         }
 
         @keyframes sparkleFloat {
-            0%, 100% { 
-                opacity: 0; 
-                transform: translate(0, 0) rotate(0deg) scale(0.8); 
-            }
+            0%, 100% { opacity: 0; transform: translate(0, 0) rotate(0deg) scale(0.8); }
             15% { opacity: 0.6; }
-            50% { 
-                opacity: 0.9; 
-                transform: translate(50px, -70px) rotate(180deg) scale(1.3); 
-            }
+            50% { opacity: 0.9; transform: translate(50px, -70px) rotate(180deg) scale(1.3); }
             85% { opacity: 0.5; }
         }
 
-        /* ========================================
-           ANIMATIONS
-        ======================================== */
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -334,23 +282,14 @@
             50% { transform: scale(1.02); }
         }
 
-        @keyframes gentlePulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        /* ========================================
-           MAIN WRAPPER
-        ======================================== */
+        /* Main Wrapper */
         .main-wrapper {
             position: relative;
             z-index: 10;
             min-height: 100vh;
         }
 
-        /* ========================================
-           NAVIGATION
-        ======================================== */
+        /* Navigation */
         nav {
             padding: 30px 5%;
             display: flex;
@@ -383,9 +322,7 @@
             user-select: none;
         }
 
-        /* ========================================
-           HERO SECTION
-        ======================================== */
+        /* Hero Section */
         .hero {
             max-width: 900px;
             margin: 80px auto 120px;
@@ -435,9 +372,7 @@
             font-style: italic;
         }
 
-        /* ========================================
-           BUTTONS
-        ======================================== */
+        /* Buttons */
         .btn-group {
             display: flex;
             flex-wrap: wrap;
@@ -468,13 +403,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
 
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* ========================================
-           SECTIONS
-        ======================================== */
+        /* Sections */
         .section {
             max-width: 1000px;
             margin: 120px auto;
@@ -546,9 +475,7 @@
             text-align: center;
         }
 
-        /* ========================================
-           MIRROR SECTION
-        ======================================== */
+        /* Mirror Section */
         .mirror-section {
             max-width: 950px;
             margin: 140px auto;
@@ -611,9 +538,7 @@
             margin-bottom: 35px;
         }
 
-        /* ========================================
-           FOOTER
-        ======================================== */
+        /* Footer */
         footer {
             text-align: center;
             padding: 80px 30px 40px;
@@ -634,70 +559,28 @@
             color: rgba(74, 74, 74, 0.5);
         }
 
-        /* ========================================
-           RESPONSIVE
-        ======================================== */
+        /* Responsive */
         @media (max-width: 768px) {
-            nav {
-                font-size: 0.85rem;
-                gap: 5px;
-            }
-
-            nav a {
-                padding: 6px 10px;
-            }
-
-            .hero {
-                margin: 50px auto 80px;
-            }
-
-            .section {
-                margin: 80px auto;
-            }
-
-            .section-card {
-                padding: 50px 35px;
-            }
-
-            .mirror-section {
-                margin: 100px auto;
-            }
-
-            .mirror-card {
-                padding: 55px 35px;
-            }
-
-            .mirror-icon-large {
-                font-size: 4rem;
-            }
-
-            .section-icon {
-                font-size: 2.5rem;
-            }
-
-            .btn {
-                padding: 12px 30px;
-                font-size: 0.95rem;
-            }
+            nav { font-size: 0.85rem; gap: 5px; }
+            nav a { padding: 6px 10px; }
+            .hero { margin: 50px auto 80px; }
+            .section { margin: 80px auto; }
+            .section-card { padding: 50px 35px; }
+            .mirror-section { margin: 100px auto; }
+            .mirror-card { padding: 55px 35px; }
+            .mirror-icon-large { font-size: 4rem; }
+            .section-icon { font-size: 2.5rem; }
+            .btn { padding: 12px 30px; font-size: 0.95rem; }
         }
 
-        /* ========================================
-           REDUCED MOTION
-        ======================================== */
+        /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-            
-            .cloud-layer,
-            .particle-system,
-            .aurora-container {
-                display: none;
-            }
+            .cloud-layer, .particle-system, .aurora-container { display: none; }
         }
     </style>
 </head>
@@ -1030,32 +913,26 @@
     </div>
 
     <script>
-        // ========================================
-        // TIME-BASED GRADIENT (soft day → night)
-        // ========================================
+        // Time-based gradient
         function setTimeBasedGradient() {
             const hour = new Date().getHours();
             const root = document.documentElement;
 
-            // morning (6am - 12pm)
             if (hour >= 6 && hour < 12) {
                 root.style.setProperty('--gradient-1', '#FFEBDD');
                 root.style.setProperty('--gradient-2', '#FFE3C8');
                 root.style.setProperty('--gradient-3', '#F4DDF5');
                 root.style.setProperty('--gradient-4', '#FFF4E2');
-            // afternoon (12pm - 6pm)
             } else if (hour >= 12 && hour < 18) {
                 root.style.setProperty('--gradient-1', '#FFDAD1');
                 root.style.setProperty('--gradient-2', '#FFC7D8');
                 root.style.setProperty('--gradient-3', '#E5D4FF');
                 root.style.setProperty('--gradient-4', '#FFE9E0');
-            // evening (6pm - 10pm)
             } else if (hour >= 18 && hour < 22) {
                 root.style.setProperty('--gradient-1', '#F5C0C8');
                 root.style.setProperty('--gradient-2', '#E6B6E9');
                 root.style.setProperty('--gradient-3', '#D7C3FF');
                 root.style.setProperty('--gradient-4', '#F5CFDF');
-            // night (10pm - 6am)
             } else {
                 root.style.setProperty('--gradient-1', '#E3C3F2');
                 root.style.setProperty('--gradient-2', '#D9B5E5');
@@ -1064,42 +941,29 @@
             }
         }
         setTimeBasedGradient();
-        setInterval(setTimeBasedGradient, 60 * 60 * 1000);
+        setInterval(setTimeBasedGradient, 3600000);
 
-        // ========================================
-        // CUSTOM CURSOR
-        // ========================================
+        // Custom Cursor
         const cursor = document.querySelector('.custom-cursor');
         const cursorFollower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0, followerX = 0, followerY = 0;
         
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
-        let followerX = 0, followerY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
         
         function animateCursor() {
             cursorX += (mouseX - cursorX) * 0.2;
             cursorY += (mouseY - cursorY) * 0.2;
             cursor.style.left = cursorX + 'px';
             cursor.style.top = cursorY + 'px';
-            
             followerX += (mouseX - followerX) * 0.1;
             followerY += (mouseY - followerY) * 0.1;
             cursorFollower.style.left = followerX + 'px';
             cursorFollower.style.top = followerY + 'px';
-            
             requestAnimationFrame(animateCursor);
         }
-        
         animateCursor();
 
-        // ========================================
-        // RIPPLE EFFECT
-        // ========================================
+        // Ripple Effect
         const rippleCanvas = document.getElementById('rippleCanvas');
         const rippleCtx = rippleCanvas.getContext('2d');
         let ripples = [];
@@ -1108,50 +972,33 @@
             rippleCanvas.width = window.innerWidth;
             rippleCanvas.height = window.innerHeight;
         }
-        
         resizeRippleCanvas();
         window.addEventListener('resize', resizeRippleCanvas);
         
         document.addEventListener('click', (e) => {
-            ripples.push({
-                x: e.clientX,
-                y: e.clientY,
-                radius: 0,
-                maxRadius: 150,
-                alpha: 1
-            });
+            ripples.push({ x: e.clientX, y: e.clientY, radius: 0, maxRadius: 150, alpha: 1 });
         });
         
         function animateRipples() {
             rippleCtx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
-            
             ripples = ripples.filter(ripple => {
                 ripple.radius += 3;
                 ripple.alpha -= 0.015;
-                
                 if (ripple.alpha <= 0) return false;
-                
                 rippleCtx.beginPath();
                 rippleCtx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
                 rippleCtx.strokeStyle = `rgba(252, 204, 212, ${ripple.alpha * 0.5})`;
                 rippleCtx.lineWidth = 2;
                 rippleCtx.stroke();
-                
                 return true;
             });
-            
             requestAnimationFrame(animateRipples);
         }
-        
         animateRipples();
 
-        // ========================================
-        // PARTICLE SYSTEM
-        // ========================================
+        // Particle System
         function createParticles() {
             const particleSystem = document.getElementById('particleSystem');
-            
-            // slow particles
             for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle slow';
@@ -1161,8 +1008,6 @@
                 particle.style.setProperty('--particle-drift', (Math.random() - 0.5) * 80 + 'px');
                 particleSystem.appendChild(particle);
             }
-            
-            // fast particles
             for (let i = 0; i < 12; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle fast';
@@ -1172,8 +1017,6 @@
                 particle.style.setProperty('--particle-drift', (Math.random() - 0.5) * 100 + 'px');
                 particleSystem.appendChild(particle);
             }
-            
-            // glow particles
             for (let i = 0; i < 8; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle glow';
@@ -1185,46 +1028,23 @@
             }
         }
 
-        // ========================================
-        // CLOUD SYSTEM
-        // ========================================
+        // Cloud System
         function createCloudLayers() {
             const layers = [
-                { 
-                    container: document.getElementById('cloudLayerBack'), 
-                    count: 8, 
-                    speedRange: [35, 45], 
-                    sizeRange: [80, 120], 
-                    opacity: 0.3 
-                },
-                { 
-                    container: document.getElementById('cloudLayerMid'), 
-                    count: 6, 
-                    speedRange: [25, 35], 
-                    sizeRange: [100, 150], 
-                    opacity: 0.5 
-                },
-                { 
-                    container: document.getElementById('cloudLayerFront'), 
-                    count: 5, 
-                    speedRange: [15, 25], 
-                    sizeRange: [120, 180], 
-                    opacity: 0.7 
-                }
+                { container: document.getElementById('cloudLayerBack'), count: 8, speedRange: [35, 45], sizeRange: [80, 120], opacity: 0.3 },
+                { container: document.getElementById('cloudLayerMid'), count: 6, speedRange: [25, 35], sizeRange: [100, 150], opacity: 0.5 },
+                { container: document.getElementById('cloudLayerFront'), count: 5, speedRange: [15, 25], sizeRange: [120, 180], opacity: 0.7 }
             ];
-            
             layers.forEach(layer => {
                 for (let i = 0; i < layer.count; i++) {
                     const cloud = document.createElement('div');
                     cloud.className = 'parallax-cloud';
-                    
                     const leftPos = Math.random() * 95;
                     const duration = layer.speedRange[0] + Math.random() * (layer.speedRange[1] - layer.speedRange[0]);
                     const delay = Math.random() * 30;
                     const size = layer.sizeRange[0] + Math.random() * (layer.sizeRange[1] - layer.sizeRange[0]);
                     const drift = (Math.random() - 0.3) * 120;
                     const rotate = (Math.random() - 0.5) * 15;
-                    
                     cloud.style.left = leftPos + '%';
                     cloud.style.width = size + 'px';
                     cloud.style.height = (size * 0.6) + 'px';
@@ -1233,13 +1053,11 @@
                     cloud.style.setProperty('--cloud-opacity', layer.opacity);
                     cloud.style.setProperty('--cloud-drift', drift + '%');
                     cloud.style.setProperty('--cloud-rotate', rotate + 'deg');
-                    
                     layer.container.appendChild(cloud);
                 }
             });
         }
 
-        // healing quotes for the quote-clouds
         const healingQuotes = [
             "you're not too much.\nmaybe the world was too little.",
             "you don't have to earn\nrest or softness.",
@@ -1258,71 +1076,49 @@
 
         function createQuoteClouds() {
             const frontLayer = document.getElementById('cloudLayerFront');
-            
             for (let i = 0; i < 7; i++) {
                 const cloud = document.createElement('div');
                 cloud.className = 'quote-cloud';
                 cloud.textContent = healingQuotes[Math.floor(Math.random() * healingQuotes.length)];
-                
                 const leftPos = Math.random() * 95;
                 const duration = 22 + Math.random() * 18;
                 const delay = Math.random() * 25;
                 const drift = (Math.random() - 0.4) * 130;
                 const rotate = (Math.random() - 0.5) * 18;
-                
                 cloud.style.left = leftPos + '%';
                 cloud.style.animationDuration = duration + 's';
                 cloud.style.animationDelay = delay + 's';
                 cloud.style.setProperty('--quote-drift', drift + '%');
                 cloud.style.setProperty('--quote-rotate', rotate + 'deg');
-                
                 frontLayer.appendChild(cloud);
             }
         }
 
-        // ========================================
-        // SPARKLES
-        // ========================================
+        // Sparkles
         function addSparkle() {
             if (Math.random() > 0.4) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'sparkle-float';
                 sparkle.textContent = Math.random() > 0.5 ? '✨' : '💫';
-                
                 sparkle.style.left = Math.random() * 100 + '%';
                 sparkle.style.top = Math.random() * 100 + '%';
-                
                 document.body.appendChild(sparkle);
                 setTimeout(() => sparkle.remove(), 8000);
             }
         }
-        
         setInterval(addSparkle, 3500);
 
-        // ========================================
-        // SMOOTH SCROLL
-        // ========================================
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
-        // ========================================
-        // INTERSECTION OBSERVER FOR ANIMATIONS
-        // ========================================
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
+        // Intersection Observer
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1332,7 +1128,6 @@
             });
         }, observerOptions);
 
-        // observe all section cards
         document.querySelectorAll('.section-card, .mirror-card').forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(30px)';
@@ -1340,18 +1135,13 @@
             observer.observe(card);
         });
 
-        // ========================================
-        // INITIALIZE
-        // ========================================
+        // Initialize
         createParticles();
         createCloudLayers();
         createQuoteClouds();
 
-        // log a cozy welcome
-        console.log('%c🤍 welcome to withouttoomuchthought', 
-            'font-family: Georgia, serif; font-size: 14px; color: #5A5A5A; padding: 10px;');
-        console.log('%ca soft place to land.', 
-            'font-family: Georgia, serif; font-size: 12px; color: #888; font-style: italic;');
+        console.log('%c🤍 welcome to withouttoomuchthought', 'font-family: Georgia, serif; font-size: 14px; color: #5A5A5A; padding: 10px;');
+        console.log('%ca soft place to land.', 'font-family: Georgia, serif; font-size: 12px; color: #888; font-style: italic;');
     </script>
 </body>
 </html>
